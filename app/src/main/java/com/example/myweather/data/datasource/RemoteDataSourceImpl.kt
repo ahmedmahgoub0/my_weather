@@ -24,8 +24,8 @@ class RemoteDataSourceImpl(
 ) : RemoteDataSource {
     override suspend fun getWeather(latitude: Double, longitude: Double): WeatherDto {
         return client.get("$BASE_URL/$GET_WEATHER_ENDPOINT") {
-                parameter(LATITUDE, latitude) //30.0626
-                parameter(LONGITUDE, longitude) // 31.2497
+                parameter(LATITUDE, latitude)
+                parameter(LONGITUDE, longitude)
                 parameter(DAILY, DAILY_PARAM)
                 parameter(HOURLY, HOURLY_PARAM)
                 parameter(CURRENT, CURRENT_PARAM)
