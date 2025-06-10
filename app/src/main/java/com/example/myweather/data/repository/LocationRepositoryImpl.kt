@@ -3,7 +3,6 @@ package com.example.myweather.data.repository
 import android.Manifest
 import android.content.Context
 import android.location.Geocoder
-import android.util.Log
 import androidx.annotation.RequiresPermission
 import com.example.myweather.data.model.Location
 import com.google.android.gms.location.FusedLocationProviderClient
