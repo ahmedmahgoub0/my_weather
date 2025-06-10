@@ -35,7 +35,10 @@ fun WeatherScreen(
     viewModel: WeatherViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState()
-    if (!state.isLoading) WeatherScreenContent(state)
+    when(state.isLoading){
+        true -> { } // LoadingScreen()
+        false -> WeatherScreenContent(state)
+    }
 }
 
 @Composable
@@ -46,11 +49,12 @@ fun WeatherScreenContent(
         true -> listOf(Cyan, White)
         false -> listOf(DarkGrey, DarkGrey2)
     }
+    val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Brush.verticalGradient(colors = backgroundColors))
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(scrollState)
             .statusBarsPadding()
             .navigationBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -63,9 +67,11 @@ fun WeatherScreenContent(
                 .padding(horizontal = 12.dp)
         )
         CurrentWeather(
-            state = state, Modifier
+            state = state,
+            isScrolled = scrollState.value > 0,
+            Modifier
                 .padding(top = 12.dp)
-                .padding(horizontal = 12.dp)
+                .padding(horizontal = 12.dp),
         )
         WeatherCardSection(
             state.currentWeather,
