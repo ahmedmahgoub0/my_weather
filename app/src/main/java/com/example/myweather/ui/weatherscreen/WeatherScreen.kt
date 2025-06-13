@@ -1,5 +1,6 @@
 package com.example.myweather.ui.weatherscreen
 
+import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,14 +12,18 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowInsetsControllerCompat
 import com.example.myweather.ui.theme.Cyan
 import com.example.myweather.ui.theme.DarkGrey
 import com.example.myweather.ui.theme.DarkGrey2
@@ -45,6 +50,23 @@ fun WeatherScreen(
 fun WeatherScreenContent(
     state: WeatherUiState,
 ) {
+
+    val view = LocalView.current
+
+    SideEffect {
+        val statusBarColor = if (state.currentWeather.isDay) Cyan else DarkGrey
+        val navigationBarColor = if (state.currentWeather.isDay) White else DarkGrey2
+        val activity = view.context as Activity
+        val window = activity.window
+
+        window.statusBarColor = statusBarColor.toArgb()
+        window.navigationBarColor = navigationBarColor.toArgb()
+
+        val windowInsetsController = WindowInsetsControllerCompat(window, view)
+        windowInsetsController.isAppearanceLightStatusBars = state.currentWeather.isDay
+        windowInsetsController.isAppearanceLightNavigationBars = state.currentWeather.isDay
+    }
+
     val backgroundColors = when (state.currentWeather.isDay) {
         true -> listOf(Cyan, White)
         false -> listOf(DarkGrey, DarkGrey2)

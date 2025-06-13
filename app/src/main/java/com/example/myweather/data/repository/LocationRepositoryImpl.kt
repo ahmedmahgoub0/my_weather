@@ -6,6 +6,7 @@ import android.location.Geocoder
 import androidx.annotation.RequiresPermission
 import com.example.myweather.data.model.Location
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.Priority
 import kotlinx.coroutines.tasks.await
 import java.util.Locale
 
@@ -16,7 +17,9 @@ class LocationRepositoryImpl(
     @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     override suspend fun getCurrentLocation(): Location {
         return try {
-            val location = fusedLocationProviderClient.lastLocation.await()
+            val location = fusedLocationProviderClient.getCurrentLocation(
+                Priority.PRIORITY_HIGH_ACCURACY, null
+            ).await()
             val cityName = getLocationName(location.latitude, location.longitude)
             Location(latitude = location.latitude, longitude = location.longitude, cityName)
         } catch (e: Exception) {
